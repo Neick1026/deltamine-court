@@ -7,10 +7,10 @@
     "description": "Test007",
     "evidence": "Test",
     "discord": "TEST12323",
-    "status": "closed",
+    "status": "reviewing",
     "judge_nick": "popcat6482",
-    "verdict": "Нет докозательств",
+    "verdict": null,
     "created_at": "2026-03-18T13:46:08.897Z",
-    "updated_at": "2026-03-18T13:47:34.761Z"
+    "updated_at": "2026-03-18T13:47:40.879Z"
   }
 ]
