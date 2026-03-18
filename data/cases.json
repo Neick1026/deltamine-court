@@ -1,1 +1,15 @@
-[]
+[
+  {
+    "id": 1773841568897,
+    "plaintiff": "test1",
+    "defendant": "Test2",
+    "case_type": "grief",
+    "description": "Test007",
+    "evidence": "Test",
+    "discord": "TEST12323",
+    "status": "pending",
+    "judge_nick": null,
+    "verdict": null,
+    "created_at": "2026-03-18T13:46:08.897Z"
+  }
+]
