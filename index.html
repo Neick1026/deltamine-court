@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DeltaMine — Судебный Сервер</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <img src="assets/gavel.png" alt="Молоток" class="logo-icon" onerror="this.style.display='none'" />
+        <span class="logo-text">Delta<span class="accent">Mine</span></span>
+      </div>
+      <nav class="nav">
+        <a href="#about">О суде</a>
+        <a href="#cases">Дела</a>
+        <a href="#laws">Законы</a>
+        <a href="#judges">Судьи</a>
+        <a href="#submit">Подать иск</a>
+      </nav>
+      <div class="header-right">
+        <div class="judge-logged" id="judgeLogged" style="display:none">
+          <span class="judge-logged-name" id="judgeLoggedName"></span>
+          <button class="btn btn-outline btn-login" onclick="openJudgePanel()">Панель судьи</button>
+          <button class="btn-logout" onclick="logoutJudge()">Выйти</button>
+        </div>
+        <button class="btn btn-outline btn-login" id="loginBtn" onclick="openLogin()">⚖️ Вход для судей</button>
+        <button class="nav-toggle" onclick="toggleMenu()" aria-label="Меню">☰</button>
+      </div>
+    </div>
+    <nav class="nav-mobile" id="mobileNav">
+      <a href="#about" onclick="toggleMenu()">О суде</a>
+      <a href="#cases" onclick="toggleMenu()">Дела</a>
+      <a href="#laws" onclick="toggleMenu()">Законы</a>
+      <a href="#judges" onclick="toggleMenu()">Судьи</a>
+      <a href="#submit" onclick="toggleMenu()">Подать иск</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">⚖️ Официальный суд сервера</div>
+      <h1 class="hero-title">Судебная Система<br /><span class="accent">DeltaMine</span></h1>
+      <p class="hero-desc">Справедливость, порядок и закон на нашем сервере. Каждый игрок имеет право на честное разбирательство.</p>
+      <div class="hero-actions">
+        <a href="#submit" class="btn btn-primary">Подать иск</a>
+        <a href="#cases" class="btn btn-outline">Открытые дела</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num stat-total">0</span><span class="stat-label">Дел рассмотрено</span></div>
+      <div class="stat"><span class="stat-num stat-active">0</span><span class="stat-label">Активных дел</span></div>
+      <div class="stat"><span class="stat-num">3</span><span class="stat-label">Судьи</span></div>
+      <div class="stat"><span class="stat-num">0%</span><span class="stat-label">Справедливость</span></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section" id="about">
+    <div class="container">
+      <h2 class="section-title">О Судебной Системе</h2>
+      <div class="about-grid">
+        <div class="about-card">
+          <div class="about-icon">⚖️</div>
+          <h3>Справедливость</h3>
+          <p>Каждое дело рассматривается беспристрастно. Обе стороны имеют право высказаться и предоставить доказательства.</p>
+        </div>
+        <div class="about-card">
+          <div class="about-icon">📜</div>
+          <h3>Законность</h3>
+          <p>Все решения принимаются строго в соответствии с правилами сервера DeltaMine и судебным кодексом.</p>
+        </div>
+        <div class="about-card">
+          <div class="about-icon">🛡️</div>
+          <h3>Защита</h3>
+          <p>Суд защищает права каждого игрока от гриферства, мошенничества и нарушений правил сервера.</p>
+        </div>
+        <div class="about-card">
+          <div class="about-icon">⏱️</div>
+          <h3>Оперативность</h3>
+          <p>Дела рассматриваются в течение 48 часов. Срочные случаи - в течение 12 часов.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACTIVE CASES -->
+  <section class="section section-dark" id="cases">
+    <div class="container">
+      <h2 class="section-title">Активные Дела</h2>
+      <div class="cases-table-wrap">
+        <table class="cases-table">
+          <thead>
+            <tr>
+              <th>№ Дела</th>
+              <th>Истец</th>
+              <th>Ответчик</th>
+              <th>Тип</th>
+              <th>Статус</th>
+              <th>Судья</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAWS -->
+  <section class="section" id="laws">
+    <div class="container">
+      <h2 class="section-title">Законодательная База</h2>
+
+      <!-- Tabs -->
+      <div class="law-tabs">
+        <button class="law-tab active" onclick="showLaw('uk', this)">⚔️ Уголовный Кодекс</button>
+        <button class="law-tab" onclick="showLaw('const', this)">📜 Конституция</button>
+        <button class="law-tab" onclick="showLaw('pk', this)">⚖️ Процессуальный Кодекс</button>
+      </div>
+
+      <!-- УК -->
+      <div class="law-doc" id="law-uk">
+        <div class="law-chapter">
+          <div class="law-chapter-title">Глава I. Преступления против собственности</div>
+          <div class="law-item">
+            <div class="law-num">Пункт 1</div>
+            <h3>Гриферство</h3>
+            <p>Умышленное разрушение чужих построек или порча ландшафта в привате / возле него.</p>
+          </div>
+          <div class="law-item">
+            <div class="law-num">Пункт 2</div>
+            <h3>Кража</h3>
+            <p>Присвоение ресурсов из чужих сундуков, шалкеров или воровство со стоек для брони.</p>
+          </div>
+          <div class="law-item">
+            <div class="law-num">Пункт 3</div>
+            <h3>Мошенничество</h3>
+            <p>Обман при обмене (взял алмазы — не отдал товар).</p>
+          </div>
+        </div>
+        <div class="law-chapter">
+          <div class="law-chapter-title">Глава II. Преступления против личности</div>
+          <div class="law-item">
+            <div class="law-num">Пункт 1</div>
+            <h3>Убийство</h3>
+            <p>Нападение на игрока без веской причины или объявленной войны.</p>
+          </div>
+          <div class="law-item">
+            <div class="law-num">Пункт 2</div>
+            <h3>Травля</h3>
+            <p>Систематическое преследование игрока, мешающее ему играть.</p>
+          </div>
+        </div>
+        <div class="law-chapter">
+          <div class="law-chapter-title">Глава III. Преступления против государства</div>
+          <div class="law-item">
+            <div class="law-num">Пункт 1</div>
+            <h3>Государственная измена</h3>
+            <p>Передача секретных координат (баз, ферм) врагам государства.</p>
+          </div>
+          <div class="law-item">
+            <div class="law-num">Пункт 2</div>
+            <h3>Коррупция</h3>
+            <p>Злоупотребление служебным положением для получения личной выгоды, выражающееся в прямом использовании должностным лицом своих прав для незаконного обогащения.</p>
+          </div>
+          <div class="law-item">
+            <div class="law-num">Пункт 3</div>
+            <h3>Восстание</h3>
+            <p>Попытка свержения власти вне рамок политической системы.</p>
+          </div>
+        </div>
+        <div class="law-chapter">
+          <div class="law-chapter-title">Меры наказания</div>
+          <div class="law-penalties-list">
+            <div class="law-penalty-item">💰 <strong>Штраф</strong> — выплата суммы в валюте сервера.</div>
+            <div class="law-penalty-item">🔒 <strong>Тюремное заключение</strong> — ограничение свободы в специальной зоне (на время).</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Конституция -->
+      <div class="law-doc" id="law-const" style="display:none">
+        <div class="law-chapter">
+          <div class="law-chapter-title">Глава I. Основы государственного строя</div>
+          <div class="law-item">
+            <div class="law-num">Статья 1</div>
+            <h3>Суверенитет и Народовластие</h3>
+            <p><em>Пункт 1.</em> Государство [DeltaMine] является независимым политическим объединением. Вся власть исходит от активных игроков (Граждан).</p>
+            <p><em>Пункт 2.</em> Единственным источником легитимности власти являются выборы или общественный договор, признанный большинством.</p>
+          </div>
+          <div class="law-item">
+            <div class="law-num">Статья 2</div>
+            <h3>Верховенство Закона</h3>
+            <p><em>Пункт 1.</em> Данная Конституция имеет высшую силу. Указы Исполнительной ветви или решения Парламента не могут ей противоречить.</p>
+            <p><em>Пункт 2.</em> Незнание закона не освобождает от ответственности, но закон обязан быть опубликован в открытом доступе.</p>
+          </div>
+          <div class="law-item">
+            <div class="law-num">Статья 3</div>
+            <h3>Территориальная целостность</h3>
+            <p><em>Пункт 1.</em> Территория государства включает в себя общественные зоны (Спавн), государственные фермы и частные приваты граждан, находящиеся под защитой Гвардии.</p>
+          </div>
+        </div>
+        <div class="law-chapter">
+          <div class="law-chapter-title">Глава II. Права и свободы граждан</div>
+          <div class="law-item">
+            <div class="law-num">Статья 4</div>
+            <h3>Неприкосновенность собственности</h3>
+            <p><em>Пункт 1.</em> Любое вмешательство в личное пространство (приват), сундуки или постройки без ордера Суда приравнивается к гриферству.</p>
+            <p><em>Пункт 2.</em> Государство обязуется защищать имущество граждан от внешних угроз и внутренних воров.</p>
+          </div>
+          <div class="law-item">
+            <div class="law-num">Статья 5</div>
+            <h3>Политическая свобода</h3>
+            <p><em>Пункт 1.</em> Каждый гражданин имеет право на критику власти. Запрещена цензура, если высказывания не содержат призывов к уничтожению сервера или прямой дезинформации.</p>
+            <p><em>Пункт 2.</em> Граждане имеют право объединяться в партии и торговые союзы.</p>
+          </div>
+          <div class="law-item">
+            <div class="law-num">Статья 6</div>
+            <h3>Право на справедливый суд</h3>
+            <p><em>Пункт 1.</em> Презумпция невиновности: любой игрок считается честным, пока обратное не доказано логами, скриншотами или видео.</p>
+            <p><em>Пункт 2.</em> Право на защиту: каждый обвиняемый имеет право на адвоката или самостоятельное выступление в суде.</p>
+            <p><em>Пункт 3.</em> Запрещены самосуд и месть. Наказание назначает только законный Судья.</p>
+          </div>
+        </div>
+        <div class="law-chapter">
+          <div class="law-chapter-title">Глава III. Устройство власти</div>
+          <div class="law-item">
+            <div class="law-num">Статья 7</div>
+            <h3>Законодательная ветвь (Парламент)</h3>
+            <p><em>Пункт 1.</em> Парламент — высший орган, принимающий Кодексы (Уголовный, Процессуальный).</p>
+            <p><em>Пункт 2.</em> Парламент устанавливает размер налогов и пошлин, необходимых для развития Спавна.</p>
+            <p><em>Пункт 3.</em> Правом импичмента Парламент обладает при поддержке 2/3 голосов в случае нарушения Лидером Конституции.</p>
+          </div>
+          <div class="law-item">
+            <div class="law-num">Статья 8</div>
+            <h3>Исполнительная ветвь (Администрация и Гвардия)</h3>
+            <p><em>Пункт 1.</em> Администрация Спавна отвечает за строительство дорог, общественных ферм и поддержку экономики.</p>
+            <p><em>Пункт 2.</em> Гвардия является силовым органом. Гвардейцы обязаны пресекать нарушения, патрулировать территорию и исполнять решения Суда.</p>
+            <p><em>Пункт 3.</em> Руководитель исполнительной власти (Президент/Глава) имеет право издавать временные указы по вопросам безопасности.</p>
+          </div>
+          <div class="law-item">
+            <div class="law-num">Статья 9</div>
+            <h3>Судебная ветвь</h3>
+            <p><em>Пункт 1.</em> Суд независим. Судья не может быть одновременно Гвардейцем или Депутатом (Разделение властей).</p>
+            <p><em>Пункт 2.</em> Высшей формой доказательства в Суде признаются логи сервера и записи экрана.</p>
+            <p><em>Пункт 3.</em> Решение Суда обязательно к исполнению Гвардией немедленно.</p>
+          </div>
+        </div>
+        <div class="law-chapter">
+          <div class="law-chapter-title">Глава IV. Чрезвычайные ситуации</div>
+          <div class="law-item">
+            <div class="law-num">Статья 10</div>
+            <h3>Военное положение</h3>
+            <p><em>Пункт 1.</em> В случае массового гриферства, войны с другими городами или рейдов, Исполнительная власть может временно ограничить права на передвижение ради безопасности граждан.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ПК -->
+      <div class="law-doc" id="law-pk" style="display:none">
+        <div class="law-chapter">
+          <div class="law-chapter-title">Глава I. Следствие</div>
+          <div class="law-item">
+            <div class="law-num">Пункт 1</div>
+            <h3>Доказательства</h3>
+            <p>Главными доказательствами являются: логи сервера, скриншоты с датой/временем, видеозаписи.</p>
+          </div>
+          <div class="law-item">
+            <div class="law-num">Пункт 2</div>
+            <h3>Обыск</h3>
+            <p>Обыск территории игрока возможен только при наличии подозрений в совершении преступления.</p>
+          </div>
+        </div>
+        <div class="law-chapter">
+          <div class="law-chapter-title">Глава II. Задержание</div>
+          <div class="law-item">
+            <div class="law-num">Пункт 1</div>
+            <h3>Срок задержания</h3>
+            <p>Полиция может удерживать подозреваемого не более 2 часов до предъявления официального обвинения.</p>
+          </div>
+          <div class="law-item">
+            <div class="law-num">Пункт 2</div>
+            <h3>Права задержанного</h3>
+            <p>Игрок имеет право знать, в чём его обвиняют, и требовать защитника (адвоката).</p>
+          </div>
+        </div>
+        <div class="law-chapter">
+          <div class="law-chapter-title">Глава III. Судебный процесс</div>
+          <div class="law-item">
+            <div class="law-num">Пункт 1</div>
+            <h3>Стороны</h3>
+            <p>В суде участвуют: Судья (нейтрален), Обвинитель (прокурор/пострадавший) и Защитник (адвокат/обвиняемый).</p>
+          </div>
+          <div class="law-item">
+            <div class="law-num">Пункт 2</div>
+            <h3>Порядок процесса</h3>
+            <div class="law-steps">
+              <div class="law-step"><span>1</span> Оглашение обвинения</div>
+              <div class="law-step"><span>2</span> Предъявление доказательств</div>
+              <div class="law-step"><span>3</span> Последнее слово обвиняемого</div>
+              <div class="law-step"><span>4</span> Вердикт судьи</div>
+            </div>
+          </div>
+          <div class="law-item">
+            <div class="law-num">Пункт 3</div>
+            <h3>Апелляция</h3>
+            <p>Если ты считаешь, что судья был подкуплен или ошибся, ты имеешь право подать апелляцию.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- JUDGES -->
+  <section class="section section-dark" id="judges">
+    <div class="container">
+      <h2 class="section-title">Состав Суда</h2>
+      <div class="judges-grid">
+        <div class="judge-card">
+          <div class="judge-avatar">⚖️</div>
+          <h3>! 𝐃 𝐀 𝐖 𝐈 𝐍 𝐂 𝐈 𝐊 !</h3>
+          <div class="judge-rank">Судья</div>
+        </div>
+        <div class="judge-card">
+          <div class="judge-avatar">⚖️</div>
+          <h3>popcat6482</h3>
+          <div class="judge-rank">Судья</div>
+        </div>
+        <div class="judge-card">
+          <div class="judge-avatar">⚖️</div>
+          <h3>maksimsherks</h3>
+          <div class="judge-rank">Судья</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUBMIT CASE -->
+  <section class="section" id="submit">
+    <div class="container">
+      <h2 class="section-title">Подать Иск</h2>
+      <div class="form-wrap">
+        <form class="case-form" onsubmit="submitCase(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="plaintiff">Ваш ник (Истец) *</label>
+              <input type="text" id="plaintiff" placeholder="Ваш ник на сервере" required />
+            </div>
+            <div class="form-group">
+              <label for="defendant">Ник ответчика *</label>
+              <input type="text" id="defendant" placeholder="Ник нарушителя" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="caseType">Тип нарушения *</label>
+            <select id="caseType" required>
+              <option value="">— Выберите тип —</option>
+              <option value="grief">Гриферство</option>
+              <option value="fraud">Мошенничество</option>
+              <option value="theft">Кража</option>
+              <option value="land">Земельный спор</option>
+              <option value="insult">Оскорбления</option>
+              <option value="cheat">Читерство</option>
+              <option value="other">Другое</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="description">Описание ситуации *</label>
+            <textarea id="description" rows="5" placeholder="Подробно опишите что произошло, когда и где. Укажите координаты если есть." required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="evidence">Доказательства</label>
+            <textarea id="evidence" rows="3" placeholder="Ссылки на скриншоты, видео, логи чата (imgur, youtube и т.д.)"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="discord">Discord (для связи)</label>
+            <input type="text" id="discord" placeholder="username#0000 или @username" />
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">⚖️ Подать иск</button>
+        </form>
+        <div class="form-success" id="formSuccess">
+          <div class="success-icon">✅</div>
+          <h3>Иск подан!</h3>
+          <p>Ваше дело зарегистрировано. Судья свяжется с вами в течение 48 часов через Discord или личные сообщения на сервере.</p>
+          <button class="btn btn-outline" onclick="resetForm()">Подать ещё один иск</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <span class="logo-text">Delta<span class="accent">Mine</span></span>
+          <p>Судебная система сервера DeltaMine.<br />Справедливость для каждого игрока.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Навигация</h4>
+          <a href="#about">О суде</a>
+          <a href="#cases">Дела</a>
+          <a href="#laws">Законы</a>
+          <a href="#judges">Судьи</a>
+          <a href="#submit">Подать иск</a>
+        </div>
+        <div class="footer-contact">
+          <h4>Контакты</h4>
+          <p>Discord: <strong><a href="https://discord.com/invite/wkUWTV35ud" target="_blank" style="color:var(--accent);text-decoration:none;">discord.com/invite/wkUWTV35ud</a></strong></p>
+          <p>Сервер: <strong>delta-mine.ru</strong></p>
+          <p>Версия: <strong>1.21.1</strong></p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2024 DeltaMine Court System. Все права защищены.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- LOGIN MODAL -->
+  <div class="modal-overlay" id="loginModal" onclick="closeLoginOutside(event)">
+    <div class="modal">
+      <button class="modal-close" onclick="closeLogin()">✕</button>
+      <div class="modal-icon">⚖️</div>
+      <h2 class="modal-title">Вход для судей</h2>
+      <form onsubmit="loginJudge(event)">
+        <div class="form-group">
+          <label for="loginNick">Ник судьи</label>
+          <input type="text" id="loginNick" placeholder="Введите ваш ник" required />
+        </div>
+        <div class="form-group">
+          <label for="loginPass">Пароль</label>
+          <input type="password" id="loginPass" placeholder="Введите пароль" required />
+        </div>
+        <div class="login-error" id="loginError"></div>
+        <button type="submit" class="btn btn-primary btn-full" id="loginSubmitBtn">Войти</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- JUDGE PANEL MODAL -->
+  <div class="modal-overlay" id="judgePanelModal" onclick="closeJudgePanelOutside(event)">
+    <div class="modal modal-wide">
+      <button class="modal-close" onclick="closeJudgePanel()">✕</button>
+      <h2 class="modal-title">⚖️ Панель судьи</h2>
+      <div id="judgePanelCases"></div>
+    </div>
+  </div>
+
+  <!-- VERDICT MODAL -->
+  <div class="modal-overlay" id="verdictModal" onclick="closeVerdictOutside(event)">
+    <div class="modal">
+      <button class="modal-close" onclick="closeVerdict()">✕</button>
+      <h2 class="modal-title">Вынести вердикт</h2>
+      <input type="hidden" id="verdictCaseId" />
+      <input type="hidden" id="verdictStatus" />
+      <div class="form-group">
+        <label>Вердикт / комментарий</label>
+        <textarea id="verdictText" rows="4" placeholder="Опишите решение суда..."></textarea>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="submitVerdict()">Подтвердить</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
