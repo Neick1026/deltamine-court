@@ -1,7 +1,7 @@
 // ===================== CONFIG =====================
-const GITHUB_OWNER = 'YOUR_USERNAME';
-const GITHUB_REPO  = 'YOUR_REPO';
-const GITHUB_TOKEN = 'ghp_YOUR_TOKEN'; // Fine-grained token: Contents Read & Write
+const GITHUB_OWNER = 'Neick1026';
+const GITHUB_REPO  = 'deltamine-court';
+const GITHUB_TOKEN = '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'; // Fine-grained token: Contents Read & Write
 const CASES_PATH   = 'data/cases.json';
 const JUDGES_PATH  = 'data/judges.json';
 const GITHUB_API   = 'https://api.github.com';
