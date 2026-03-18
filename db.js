@@ -2,7 +2,7 @@
 
 const GH_OWNER = 'Neick1026';  // твой GitHub ник
 const GH_REPO  = 'deltamine-court';      // название репо
-const GH_TOKEN = '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'; // токен с правом repo
+const GH_TOKEN = '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'; // токен с правом repo
 
 const GH_API = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents`;
 
