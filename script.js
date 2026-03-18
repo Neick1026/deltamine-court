@@ -1,42 +1,4 @@
-// ===================== CONFIG =====================
-const GITHUB_OWNER = 'Neick1026';
-const GITHUB_REPO  = 'deltamine-court';
-const GITHUB_TOKEN = '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'; // Fine-grained token: Contents Read & Write
-const CASES_PATH   = 'data/cases.json';
-const JUDGES_PATH  = 'data/judges.json';
-const GITHUB_API   = 'https://api.github.com';
-
-let judgeSession = null; // { nick, token }
-
-// ===================== GITHUB HELPERS =====================
-async function ghGet(path) {
-  const headers = {
-    'Accept': 'application/vnd.github+json',
-    'Authorization': `Bearer ${GITHUB_TOKEN}`,
-  };
-  const res = await fetch(`${GITHUB_API}/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${path}`, { headers });
-  if (!res.ok) throw new Error('GitHub fetch error');
-  const data = await res.json();
-  return { content: JSON.parse(atob(data.content)), sha: data.sha };
-}
-
-async function ghPut(path, content, sha, message) {
-  const res = await fetch(`${GITHUB_API}/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${path}`, {
-    method: 'PUT',
-    headers: {
-      'Accept': 'application/vnd.github+json',
-      'Authorization': `Bearer ${GITHUB_TOKEN}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      message,
-      content: btoa(unescape(encodeURIComponent(JSON.stringify(content, null, 2)))),
-      sha,
-    }),
-  });
-  if (!res.ok) throw new Error('GitHub write error');
-  return res.json();
-}
+let judgeSession = null;
 
 // ===================== MOBILE NAV =====================
 function toggleMenu() {
@@ -61,9 +23,9 @@ function showLaw(id, btn) {
 // ===================== LOAD CASES =====================
 async function loadCases() {
   try {
-    const { content } = await ghGet(CASES_PATH);
-    renderCasesTable(content);
-    updateStats(content);
+    const cases = await DB.getCases();
+    renderCasesTable(cases);
+    updateStats(cases);
   } catch {
     console.error('Не удалось загрузить дела');
   }
@@ -79,7 +41,7 @@ function renderCasesTable(cases) {
   }
   tbody.innerHTML = active.map(c => `
     <tr>
-      <td><span class="case-id">#${String(c.id).padStart(4,'0')}</span></td>
+      <td><span class="case-id">#${String(c.id).slice(-4).padStart(4,'0')}</span></td>
       <td>${esc(c.plaintiff)}</td>
       <td>${esc(c.defendant)}</td>
       <td><span class="tag tag-${c.case_type}">${caseTypeLabel(c.case_type)}</span></td>
@@ -106,7 +68,6 @@ async function submitCase(e) {
   btn.textContent = 'Отправка...';
 
   try {
-    const { content: cases, sha } = await ghGet(CASES_PATH);
     const newCase = {
       id: Date.now(),
       plaintiff:   document.getElementById('plaintiff').value.trim(),
@@ -120,8 +81,7 @@ async function submitCase(e) {
       verdict:     null,
       created_at:  new Date().toISOString(),
     };
-    cases.push(newCase);
-    await ghPut(CASES_PATH, cases, sha, `Новое дело #${newCase.id} от ${newCase.plaintiff}`);
+    await DB.addCase(newCase);
     document.querySelector('.case-form').style.display = 'none';
     document.getElementById('formSuccess').classList.add('show');
     loadCases();
@@ -160,7 +120,7 @@ async function loginJudge(e) {
   const password = document.getElementById('loginPass').value;
 
   try {
-    const { content: judges } = await ghGet(JUDGES_PATH);
+    const judges = await DB.getJudges();
     const judge = judges.find(j => j.nick === nick && j.password === password);
     if (!judge) throw new Error('Неверный ник или пароль');
 
@@ -196,7 +156,7 @@ async function loadJudgeCases() {
   const container = document.getElementById('judgePanelCases');
   container.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:20px">Загрузка...</p>';
   try {
-    const { content: cases } = await ghGet(CASES_PATH);
+    const cases = await DB.getCases();
     if (!cases.length) {
       container.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:20px">Дел нет</p>';
       return;
@@ -204,7 +164,7 @@ async function loadJudgeCases() {
     container.innerHTML = cases.map(c => `
       <div class="judge-case-card">
         <div class="judge-case-header">
-          <span class="case-id">#${String(c.id).toString().slice(-4).padStart(4,'0')}</span>
+          <span class="case-id">#${String(c.id).slice(-4).padStart(4,'0')}</span>
           <span class="tag tag-${c.case_type}">${caseTypeLabel(c.case_type)}</span>
           <span class="status status-${c.status}">${statusLabel(c.status)}</span>
           <span style="font-size:.8rem;color:var(--text-muted);margin-left:auto">${new Date(c.created_at).toLocaleDateString('ru')}</span>
@@ -217,9 +177,9 @@ async function loadJudgeCases() {
           ${c.verdict  ? `<p class="judge-verdict">⚖️ ${esc(c.verdict)}</p>` : ''}
         </div>
         <div class="judge-case-actions">
-          <button class="btn-action btn-review"  onclick="judgeAction(${c.id},'reviewing')"         ${c.status==='reviewing'?'disabled':''}>🔍 Рассмотреть</button>
-          <button class="btn-action btn-approve" onclick="openVerdict(${c.id},'approved')"                                               >✅ Одобрить</button>
-          <button class="btn-action btn-close"   onclick="openVerdict(${c.id},'closed')"                                                >🔒 Закрыть</button>
+          <button class="btn-action btn-review"  onclick="judgeAction(${c.id},'reviewing')"       ${c.status==='reviewing'?'disabled':''}>🔍 Рассмотреть</button>
+          <button class="btn-action btn-approve" onclick="openVerdict(${c.id},'approved')"        >✅ Одобрить</button>
+          <button class="btn-action btn-close"   onclick="openVerdict(${c.id},'closed')"          >🔒 Закрыть</button>
         </div>
       </div>
     `).join('');
@@ -230,14 +190,12 @@ async function loadJudgeCases() {
 
 async function judgeAction(id, status, verdict = null) {
   try {
-    const { content: cases, sha } = await ghGet(CASES_PATH);
-    const idx = cases.findIndex(c => c.id === id);
-    if (idx === -1) throw new Error('Дело не найдено');
-    cases[idx].status     = status;
-    cases[idx].judge_nick = judgeSession.nick;
-    cases[idx].verdict    = verdict;
-    cases[idx].updated_at = new Date().toISOString();
-    await ghPut(CASES_PATH, cases, sha, `Дело #${id}: статус → ${status} (${judgeSession.nick})`);
+    await DB.updateCase(id, {
+      status,
+      verdict,
+      judge_nick: judgeSession.nick,
+      updated_at: new Date().toISOString()
+    });
     loadJudgeCases();
     loadCases();
   } catch (err) {
