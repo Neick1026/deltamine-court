@@ -17,6 +17,7 @@
         <img src="assets/gavel.png" alt="Молоток" class="logo-icon" onerror="this.style.display='none'" />
         <span class="logo-text">Delta<span class="accent">Mine</span></span>
       </div>
+      <button class="btn-admin-open" id="adminOpenBtn" style="display:none" onclick="openAdminPanel()" title="Админ-панель">⚙️</button>
       <nav class="nav">
         <a href="#about">О суде</a>
         <a href="#cases">Дела</a>
@@ -58,8 +59,8 @@
     <div class="hero-stats">
       <div class="stat"><span class="stat-num stat-total">0</span><span class="stat-label">Дел рассмотрено</span></div>
       <div class="stat"><span class="stat-num stat-active">0</span><span class="stat-label">Активных дел</span></div>
-      <div class="stat"><span class="stat-num">3</span><span class="stat-label">Судьи</span></div>
-      <div class="stat"><span class="stat-num">0%</span><span class="stat-label">Справедливость</span></div>
+      <div class="stat"><span class="stat-num stat-judges">3</span><span class="stat-label">Судьи</span></div>
+      <div class="stat"><span class="stat-num stat-justice">0%</span><span class="stat-label">Справедливость</span></div>
     </div>
   </section>
 
@@ -328,7 +329,7 @@
       <div class="judges-grid">
         <div class="judge-card">
           <div class="judge-avatar">⚖️</div>
-          <h3>! 𝐃 𝐀 𝐖 𝐈 𝐍 𝐂 𝐈 𝐊 !</h3>
+          <h3>dawincik</h3>
           <div class="judge-rank">Судья</div>
         </div>
         <div class="judge-card">
@@ -469,6 +470,25 @@
         <textarea id="verdictText" rows="4" placeholder="Опишите решение суда..."></textarea>
       </div>
       <button class="btn btn-primary btn-full" onclick="submitVerdict()">Подтвердить</button>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL MODAL -->
+  <div class="modal-overlay" id="adminPanelModal" onclick="closeAdminOutside(event)">
+    <div class="modal modal-wide">
+      <button class="modal-close" onclick="closeAdminPanel()">✕</button>
+      <h2 class="modal-title">⚙️ Админ-панель</h2>
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="showAdminTab('cases', this)">📋 Все дела</button>
+        <button class="admin-tab" onclick="showAdminTab('judges', this)">⚖️ Судьи</button>
+        <button class="admin-tab btn-danger-tab" onclick="confirmClearAll()">🗑️ Очистить все дела</button>
+      </div>
+      <div id="adminTabCases">
+        <div id="adminCasesList"></div>
+      </div>
+      <div id="adminTabJudges" style="display:none">
+        <div id="adminJudgesList"></div>
+      </div>
     </div>
   </div>
 

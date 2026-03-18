@@ -1,8 +1,8 @@
 // Хранилище через GitHub — данные в data/cases.json
 
-const GH_OWNER = 'YOUR_USERNAME';  // твой GitHub ник
-const GH_REPO  = 'YOUR_REPO';      // название репо
-const GH_TOKEN = 'ghp_YOUR_TOKEN'; // токен с правом repo
+const GH_OWNER = 'Neick1026';  // твой GitHub ник
+const GH_REPO  = 'deltamine-court';      // название репо
+const GH_TOKEN = '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'; // токен с правом repo
 
 const GH_API = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents`;
 
@@ -40,8 +40,11 @@ async function ghWrite(path, content, sha, message) {
 }
 
 const DB = {
+  _casesSha: null,
+
   async getCases() {
     const { content, sha } = await ghRead('data/cases.json');
+    this._casesSha = sha;
     _casesSha = sha;
     return content;
   },
@@ -49,7 +52,9 @@ const DB = {
   async addCase(newCase) {
     const cases = await this.getCases();
     cases.push(newCase);
-    _casesSha = await ghWrite('data/cases.json', cases, _casesSha, `Новое дело от ${newCase.plaintiff}`);
+    const newSha = await ghWrite('data/cases.json', cases, this._casesSha, `Новое дело от ${newCase.plaintiff}`);
+    this._casesSha = newSha;
+    _casesSha = newSha;
   },
 
   async updateCase(id, updates) {
@@ -57,7 +62,9 @@ const DB = {
     const idx = cases.findIndex(c => c.id === id);
     if (idx === -1) throw new Error('Дело не найдено');
     Object.assign(cases[idx], updates);
-    _casesSha = await ghWrite('data/cases.json', cases, _casesSha, `Дело #${id} → ${updates.status}`);
+    const newSha = await ghWrite('data/cases.json', cases, this._casesSha, `Дело #${id} → ${updates.status}`);
+    this._casesSha = newSha;
+    _casesSha = newSha;
     return cases[idx];
   },
 

@@ -1,16 +1,1 @@
-[
-  {
-    "id": 1773841568897,
-    "plaintiff": "test1",
-    "defendant": "Test2",
-    "case_type": "grief",
-    "description": "Test007",
-    "evidence": "Test",
-    "discord": "TEST12323",
-    "status": "closed",
-    "judge_nick": "popcat6482",
-    "verdict": null,
-    "created_at": "2026-03-18T13:46:08.897Z",
-    "updated_at": "2026-03-18T13:48:03.537Z"
-  }
-]
+[]

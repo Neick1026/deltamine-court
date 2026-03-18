@@ -1,5 +1,6 @@
 [
-  { "nick": "! 𝐃 𝐀 𝐖 𝐈 𝐍 𝐂 𝐈 𝐊 !", "password": "dawincik123" },
-  { "nick": "popcat6482",             "password": "popcat123"   },
-  { "nick": "maksimsherks",           "password": "maksim123"   }
+  { "nick": "dawincik",     "password": "dawincik123" },
+  { "nick": "popcat6482",   "password": "popcat123"   },
+  { "nick": "maksimsherks", "password": "maksim123"   },
+  { "nick": "ftr26",        "password": "artexont2611", "admin": true }
 ]
