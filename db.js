@@ -1,8 +1,8 @@
 // Хранилище через GitHub — данные в data/cases.json
 
 const GH_OWNER = 'Neick1026';  // твой GitHub ник
-const GH_REPO  = 'deltamine-court';      // название репо
-const GH_TOKEN = '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'; // токен с правом repo
+const GH_REPO  = 'delta';      // название репо
+const GH_TOKEN = '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'; // токен с правом repo
 
 const GH_API = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents`;
 
